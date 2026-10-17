@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prompt Filter</title>
+<style>
+  :root { color-scheme: light dark; --bg: #f5f7fb; --card: #fff; --fg: #162033; --muted: #667085; --line: #d7deea; --accent: #4f46e5; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #0f1420; --card: #18202d; --fg: #eef2ff; --muted: #a3afc2; --line: #273246; --accent: #8188ff; } }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: radial-gradient(circle at top, rgba(79, 70, 229, 0.16), transparent 42%), var(--bg); color: var(--fg); font: 15px/1.6 system-ui, "Noto Sans TC", sans-serif; padding: 24px; }
+  .card { width: min(720px, 100%); background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 24px; box-shadow: 0 18px 50px rgba(0, 0, 0, 0.14); }
+  h1 { margin: 0 0 8px; font-size: 32px; }
+  p { margin: 0 0 12px; color: var(--muted); }
+  .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+  a.btn { display: inline-block; padding: 11px 16px; border-radius: 12px; background: var(--accent); color: #fff; text-decoration: none; font-weight: 700; }
+  a.ghost { background: transparent; color: var(--fg); border: 1px solid var(--line); }
+</style>
+</head>
+<body>
+  <main class="card">
+    <p style="margin:0 0 8px;color:#0f9d7a;font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:12px">Cloudflare Pages</p>
+    <h1>Prompt Filter</h1>
+     <p>這是管理與同步入口。管理者請使用 Google 登入，只有已授權帳號可以進入管理頁。</p>
+    <div class="actions">
+      <a class="btn" href="/login">Google 登入</a>
+      <a class="btn ghost" href="/admin/">前往管理頁</a>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<style>
+  :root { color-scheme: light dark; }
+  body { width: 320px; margin: 0; padding: 12px; font: 13px/1.4 system-ui, "Noto Sans TC", sans-serif; }
+  h1 { font-size: 15px; margin: 0 0 6px; }
+  .n { font-size: 28px; font-weight: 700; }
+  .hint { font-size: 12px; color: #666; margin: 6px 0 10px; }
+  .section { margin-top: 12px; padding-top: 10px; border-top: 1px solid rgba(127,127,127,.18); }
+  .section h2 { font-size: 13px; margin: 0 0 6px; }
+  .field { width: 100%; box-sizing: border-box; margin: 5px 0; padding: 7px 9px; border-radius: 8px; border: 1px solid rgba(127,127,127,.32); background: transparent; color: inherit; }
+  label { display: flex; gap: 8px; align-items: center; margin: 8px 0; cursor: pointer; }
+  button { width: 100%; padding: 7px; border: 0; border-radius: 8px; background: #4f46e5; color: #fff; font-size: 13px; cursor: pointer; }
+  button.secondary { margin-top: 6px; background: #5b6472; }
+  button.ghost { margin-top: 6px; background: transparent; color: inherit; border: 1px solid rgba(127,127,127,.32); }
+  .warn { padding: 8px; border-radius: 10px; background: rgba(239, 68, 68, 0.12); color: #b42318; font-size: 12px; margin: 8px 0; }
+</style>
+</head>
+<body>
+  <h1>Prompt Filter</h1>
+  <div id="consentBanner" class="warn" hidden>第一次使用需要先完成同意設定，才能開始記錄。</div>
+  <div><span class="n" id="count">0</span> 筆已保存</div>
+  <div class="hint" id="status"></div>
+  <label><input type="checkbox" id="enabled"> 啟用記錄</label>
+  <button id="open">開啟歷史紀錄</button>
+  <button id="setup" class="secondary">前往同意頁</button>
+  <div class="section">
+    <h2>同步登入</h2>
+    <input class="field" id="cloudSyncUserId" placeholder="使用者 ID">
+    <input class="field" id="cloudSyncPassword" type="password" placeholder="密碼">
+    <label><input type="checkbox" id="cloudSyncShowPassword"> 顯示密碼</label>
+    <button id="loginCloudflare">登入並儲存憑證</button>
+    <button id="logoutCloudflare" class="secondary">清除登入</button>
+    <div class="hint" id="cloudSyncNote">登入後只會保存 token，不會保存密碼。</div>
+    <div class="hint" id="cloudSyncStatus"></div>
+  </div>
+  <script src="db.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

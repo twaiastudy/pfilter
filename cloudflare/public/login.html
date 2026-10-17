@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>登入｜Prompt Filter</title>
+<style>
+  :root { color-scheme: light dark; --bg: #f5f7fb; --card: #fff; --fg: #162033; --muted: #667085; --line: #d7deea; --accent: #4f46e5; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #0f1420; --card: #18202d; --fg: #eef2ff; --muted: #a3afc2; --line: #273246; --accent: #8188ff; } }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: radial-gradient(circle at top, rgba(79, 70, 229, 0.16), transparent 42%), var(--bg); color: var(--fg); font: 15px/1.6 system-ui, "Noto Sans TC", sans-serif; padding: 24px; }
+  .card { width: min(560px, 100%); background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 24px; box-shadow: 0 18px 50px rgba(0, 0, 0, 0.14); }
+  h1 { margin: 0 0 8px; font-size: 32px; }
+  p { margin: 0 0 12px; color: var(--muted); }
+  .small { font-size: 13px; }
+  .actions { margin-top: 16px; }
+  .back { color: var(--accent); text-decoration: none; }
+</style>
+</head>
+<body>
+  <main class="card">
+    <p class="small"><a class="back" href="/">← 回首頁</a></p>
+    <span style="display:inline-block;padding:4px 10px;border-radius:999px;background:rgba(79,70,229,.12);color:var(--accent);font-size:12px;font-weight:700">僅限管理者</span>
+    <h1>Google 登入</h1>
+     <p>請使用已授權的 Google 帳號登入。登入成功後會自動進入管理頁。</p>
+    <div id="gbtn" style="display:inline-block;min-height:44px"></div>
+    <p id="msg" class="small" role="status"></p>
+  </main>
+  <script src="/login.js"></script>
+</body>
+</html>

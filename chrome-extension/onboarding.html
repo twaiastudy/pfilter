@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prompt Filter — 首次設定</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #f5f7fb;
+    --card: #ffffff;
+    --fg: #172033;
+    --muted: #5f6b7a;
+    --line: #d9e1ee;
+    --accent: #4f46e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #11151d;
+      --card: #18202d;
+      --fg: #eef2ff;
+      --muted: #a2afc2;
+      --line: #2a3443;
+      --accent: #7c83ff;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    background: radial-gradient(circle at top, rgba(79, 70, 229, 0.16), transparent 42%), var(--bg);
+    color: var(--fg);
+    font: 14px/1.45 system-ui, "Noto Sans TC", sans-serif;
+    padding: 16px;
+  }
+  .card {
+    width: min(720px, 100%);
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 18px;
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.14);
+  }
+  h1 { margin: 0 0 6px; font-size: 24px; }
+  p { margin: 0 0 8px; color: var(--muted); }
+  .grid { display: grid; gap: 10px; margin: 12px 0; }
+  .check {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 12px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: rgba(127, 140, 170, 0.08);
+  }
+  .check input { margin-top: 4px; }
+  .actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+  .section { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); }
+  .section h2 { margin: 0 0 6px; font-size: 15px; }
+  .section p { margin-bottom: 6px; }
+  .field {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: transparent;
+    color: var(--fg);
+    font: inherit;
+    margin: 5px 0;
+  }
+  button {
+    padding: 10px 14px;
+    border: 0;
+    border-radius: 12px;
+    background: var(--accent);
+    color: #fff;
+    font: inherit;
+    cursor: pointer;
+  }
+  button.secondary { background: #667085; }
+  .status { margin-top: 10px; font-size: 13px; color: var(--muted); min-height: 18px; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1>首次使用設定</h1>
+    <p>同意後才會開始記錄；需要同步時再登入管理者指定 server。</p>
+    <div class="grid">
+      <p style="margin:0;color:var(--muted)">按下「開始使用」即代表你同意只在啟用後保存你主動送出的內容與檔案紀錄。</p>
+    </div>
+    <div class="status" id="status"></div>
+
+    <div class="section">
+      <h2>同步登入</h2>
+      <input class="field" id="cloudSyncUserId" placeholder="使用者 ID">
+      <input class="field" id="cloudSyncPassword" type="password" placeholder="密碼">
+      <label class="check" style="margin-top:6px">
+        <input type="checkbox" id="cloudSyncShowPassword">
+        <span>顯示密碼</span>
+      </label>
+      <div class="actions" style="margin-top:8px">
+        <button id="start" type="button">開始使用並登入</button>
+      </div>
+      <div class="status" id="cloudSyncStatus"></div>
+    </div>
+  </div>
+  <script src="onboarding.js"></script>
+</body>
+</html>

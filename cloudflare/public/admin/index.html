@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prompt Filter Admin</title>
+<link rel="stylesheet" href="/styles.css">
+<style>
+  .topbar { display: flex; gap: 12px; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+  .topbar .left { display: flex; flex-direction: column; gap: 4px; }
+  .topbar .mini { color: var(--muted); font-size: 13px; }
+  .topbar button { width: auto; }
+  .panel-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .panel-head h2 { margin: 0; font-size: 18px; }
+  .subgrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+  .subgrid input { min-width: 0; }
+  .user-card { display: grid; gap: 8px; padding: 14px; border-radius: 14px; border: 1px solid rgba(127,127,127,.18); background: rgba(127,127,127,.05); margin-top: 10px; }
+  .user-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .badge.soft { background: rgba(127,127,127,.14); color: var(--fg); }
+</style>
+</head>
+<body>
+  <main class="shell">
+    <div class="topbar">
+      <div class="left">
+        <p class="eyebrow">Cloudflare Pages</p>
+        <h1 style="margin:0">Prompt Filter 管理頁</h1>
+        <div class="mini">已使用 Google 登入，只有管理者可查看。</div>
+      </div>
+      <button id="logout" class="ghost">登出</button>
+    </div>
+
+    <section class="panel controls">
+      <input id="q" type="search" placeholder="搜尋內容、檔名、名稱…">
+      <select id="site"><option value="">全部網站</option><option value="chatgpt">ChatGPT</option><option value="claude">Claude</option><option value="gemini">Gemini</option><option value="notebook">Notebook</option></select>
+      <select id="kind"><option value="">全部類型</option><option value="prompt">Prompt</option><option value="file">檔案</option></select>
+      <button id="reload">重新整理</button>
+      <button id="export" class="ghost">匯出 JSON</button>
+      <div class="meta" id="meta"></div>
+    </section>
+
+    <section class="panel" style="margin-top:18px">
+      <div class="panel-head">
+        <h2>使用者管理</h2>
+        <div class="meta" id="userMeta"></div>
+      </div>
+      <div class="subgrid">
+        <input id="userId" placeholder="使用者 ID，例如 alice">
+        <input id="userPassword" type="password" placeholder="初始 / 更新密碼">
+        <button id="saveUser">新增 / 更新</button>
+      </div>
+      <div class="meta" id="userStatus" style="margin-top:10px"></div>
+      <div id="userList"></div>
+    </section>
+
+    <section id="list" class="list"></section>
+  </main>
+  <script src="/app.js"></script>
+</body>
+</html>

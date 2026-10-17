@@ -1,0 +1,33 @@
+{
+  "manifest_version": 3,
+  "name": "Prompt Filter",
+  "version": "1.0.0",
+  "description": "在本機保存你送到 ChatGPT / Claude / Gemini / NotebookLM 的 prompt 與上傳檔案。",
+  "minimum_chrome_version": "111",
+  "permissions": ["storage", "unlimitedStorage", "permissions", "scripting"],
+  "optional_host_permissions": ["https://*.pages.dev/*"],
+  "host_permissions": [
+    "https://chatgpt.com/*",
+    "https://chat.openai.com/*",
+    "https://claude.ai/*",
+    "https://gemini.google.com/*",
+    "https://notebook.google.com/*",
+    "https://notebooklm.google.com/*"
+  ],
+  "background": { "service_worker": "background.js" },
+  "content_scripts": [
+    {
+      "matches": ["https://chatgpt.com/*", "https://chat.openai.com/*", "https://claude.ai/*", "https://gemini.google.com/*", "https://notebook.google.com/*", "https://notebooklm.google.com/*"],
+      "js": ["relay.js"],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["inject.js"],
+      "matches": ["https://chatgpt.com/*", "https://chat.openai.com/*", "https://claude.ai/*", "https://gemini.google.com/*", "https://notebook.google.com/*", "https://notebooklm.google.com/*"]
+    }
+  ],
+  "action": { "default_popup": "popup.html", "default_title": "Prompt Filter" }
+}

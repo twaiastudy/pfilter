@@ -1,0 +1,8 @@
+name = "prompt-vault"
+compatibility_date = "2026-10-17"
+pages_build_output_dir = "./public"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "prompt-vault"
+database_id = "cd625b70-6b02-4550-bf26-972d134fb6e4"

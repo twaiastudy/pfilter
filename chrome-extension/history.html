@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<title>Prompt Filter — 歷史紀錄</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #f6f6f9; --card: #fff; --fg: #1b1b22; --muted: #6b6b7a; --line: #e4e4ec; --accent: #4f46e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #14141a; --card: #1e1e27; --fg: #ececf3; --muted: #9a9aab; --line: #2e2e3a; --accent: #8b85ff; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.6 system-ui, "Noto Sans TC", sans-serif; }
+  header { position: sticky; top: 0; z-index: 5; background: var(--bg); border-bottom: 1px solid var(--line); padding: 12px 20px; }
+  .bar { max-width: 960px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  h1 { font-size: 18px; margin: 0 12px 0 0; }
+  input, select, button { font: inherit; padding: 6px 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--card); color: var(--fg); }
+  input[type=search] { flex: 1; min-width: 160px; }
+  button { cursor: pointer; }
+  button.primary { background: var(--accent); color: #fff; border-color: transparent; }
+  button.danger { color: #d33; }
+  main { max-width: 960px; margin: 16px auto; padding: 0 20px 60px; }
+  .count { color: var(--muted); font-size: 13px; margin-bottom: 10px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; color: var(--muted); font-size: 13px; margin-bottom: 8px; }
+  .badge { padding: 1px 8px; border-radius: 99px; font-size: 12px; color: #fff; }
+  .badge.chatgpt { background: #10a37f; }
+  .badge.claude { background: #c96442; }
+  .badge.gemini { background: #4285f4; }
+  .badge.notebook { background: #7c3aed; }
+  .badge.file { background: #3b82f6; }
+  .spacer { flex: 1; }
+  .text { white-space: pre-wrap; word-break: break-word; max-height: 360px; overflow: auto; }
+  .small { font-size: 12px; padding: 2px 8px; }
+  details { margin-top: 8px; font-size: 13px; color: var(--muted); }
+  pre { white-space: pre-wrap; word-break: break-all; max-height: 260px; overflow: auto; background: var(--bg); padding: 8px; border-radius: 8px; }
+  img.thumb { max-width: 220px; max-height: 160px; border-radius: 8px; margin-top: 8px; display: block; }
+  a { color: var(--accent); }
+  .empty { text-align: center; color: var(--muted); padding: 60px 0; }
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <h1>Prompt Filter</h1>
+    <input type="search" id="q" placeholder="搜尋內容、檔名…">
+    <select id="site"><option value="">全部網站</option><option value="chatgpt">ChatGPT</option><option value="claude">Claude</option><option value="gemini">Gemini</option><option value="notebook">Notebook</option></select>
+    <select id="kind"><option value="">全部類型</option><option value="prompt">Prompt</option><option value="file">檔案</option></select>
+    <button id="exp1">匯出 JSON</button>
+    <button id="exp2">匯出(含檔案)</button>
+    <button id="clear" class="danger">清空</button>
+  </div>
+</header>
+<main>
+  <div class="count" id="count"></div>
+  <div id="list"></div>
+</main>
+<script src="db.js"></script>
+<script src="history.js"></script>
+</body>
+</html>
