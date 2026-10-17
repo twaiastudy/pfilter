@@ -180,7 +180,7 @@ async function load() {
     render();
   } catch (err) {
     if (String(err.message || err).includes('401') || String(err.message || err).includes('unauthorized')) {
-      location.href = '/login';
+      location.href = '/admin/';
       return;
     }
     $('#meta').textContent = String(err.message || err);
@@ -203,7 +203,7 @@ async function loadUsers() {
 
 $('#logout').onclick = () => {
   fetch('/api/logout', { method: 'POST', credentials: 'same-origin' })
-    .finally(() => { location.href = '/login'; });
+    .finally(() => { location.href = '/'; });
 };
 
 $('#reload').onclick = load;

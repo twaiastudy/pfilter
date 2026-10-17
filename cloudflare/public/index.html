@@ -3,29 +3,92 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Prompt Filter</title>
+<meta name="description" content="Prompt Filter：企業生成式 AI 的資安入口。記錄並治理員工送往 ChatGPT、Claude、Gemini 的提示詞與檔案。">
+<title>Prompt Filter｜企業生成式 AI 資安入口</title>
 <style>
-  :root { color-scheme: light dark; --bg: #f5f7fb; --card: #fff; --fg: #162033; --muted: #667085; --line: #d7deea; --accent: #4f46e5; }
-  @media (prefers-color-scheme: dark) { :root { --bg: #0f1420; --card: #18202d; --fg: #eef2ff; --muted: #a3afc2; --line: #273246; --accent: #8188ff; } }
+  :root { color-scheme: light dark; --bg: #f5f7fb; --card: #fff; --fg: #162033; --muted: #667085; --line: #d7deea; --accent: #4f46e5; --ok: #0f9d7a; --warn: #d97706; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #0f1420; --card: #18202d; --fg: #eef2ff; --muted: #a3afc2; --line: #273246; --accent: #8188ff; --ok: #34d399; --warn: #fbbf24; } }
   * { box-sizing: border-box; }
-  body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: radial-gradient(circle at top, rgba(79, 70, 229, 0.16), transparent 42%), var(--bg); color: var(--fg); font: 15px/1.6 system-ui, "Noto Sans TC", sans-serif; padding: 24px; }
-  .card { width: min(720px, 100%); background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 24px; box-shadow: 0 18px 50px rgba(0, 0, 0, 0.14); }
-  h1 { margin: 0 0 8px; font-size: 32px; }
-  p { margin: 0 0 12px; color: var(--muted); }
-  .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
-  a.btn { display: inline-block; padding: 11px 16px; border-radius: 12px; background: var(--accent); color: #fff; text-decoration: none; font-weight: 700; }
-  a.ghost { background: transparent; color: var(--fg); border: 1px solid var(--line); }
+  body { margin: 0; background: radial-gradient(circle at top, rgba(79, 70, 229, 0.16), transparent 40%), var(--bg); color: var(--fg); font: 16px/1.7 system-ui, "Noto Sans TC", sans-serif; }
+  .wrap { width: min(1080px, 100%); margin: 0 auto; padding: 0 24px; }
+  header { padding: 22px 0; }
+  .brand { font-weight: 800; font-size: 18px; letter-spacing: .02em; }
+  .brand span { color: var(--accent); }
+  .hero { padding: 56px 0 40px; }
+  .eyebrow { display: inline-block; padding: 4px 12px; border-radius: 999px; background: rgba(79,70,229,.12); color: var(--accent); font-size: 13px; font-weight: 700; }
+  h1 { margin: 16px 0 12px; font-size: clamp(32px, 5vw, 52px); line-height: 1.2; }
+  .lead { max-width: 720px; color: var(--muted); font-size: 18px; margin: 0; }
+  section { padding: 36px 0; }
+  h2 { font-size: 26px; margin: 0 0 6px; }
+  .sub { color: var(--muted); margin: 0 0 22px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,.06); }
+  .card h3 { margin: 0 0 6px; font-size: 17px; }
+  .card p { margin: 0; color: var(--muted); font-size: 15px; }
+  .tag { display: inline-block; font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 999px; margin-bottom: 10px; }
+  .tag.now { background: rgba(15,157,122,.14); color: var(--ok); }
+  .tag.next { background: rgba(217,119,6,.14); color: var(--warn); }
+  .steps { counter-reset: s; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+  .steps .card::before { counter-increment: s; content: counter(s); display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--accent); color: #fff; font-weight: 800; margin-bottom: 10px; }
+  .vision { background: linear-gradient(135deg, rgba(79,70,229,.14), rgba(15,157,122,.10)); border: 1px solid var(--line); border-radius: 22px; padding: 28px; }
+  .vision ul { margin: 12px 0 0; padding-left: 20px; color: var(--muted); }
+  .vision li { margin: 6px 0; }
+  .vision code { background: rgba(127,127,127,.15); padding: 1px 6px; border-radius: 6px; font-size: 14px; }
+  footer { padding: 36px 0 48px; color: var(--muted); font-size: 14px; border-top: 1px solid var(--line); margin-top: 24px; }
 </style>
 </head>
 <body>
-  <main class="card">
-    <p style="margin:0 0 8px;color:#0f9d7a;font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:12px">Cloudflare Pages</p>
-    <h1>Prompt Filter</h1>
-     <p>這是管理與同步入口。管理者請使用 Google 登入，只有已授權帳號可以進入管理頁。</p>
-    <div class="actions">
-      <a class="btn" href="/login">Google 登入</a>
-      <a class="btn ghost" href="/admin/">前往管理頁</a>
+  <header class="wrap"><div class="brand">Prompt <span>Filter</span></div></header>
+
+  <main>
+    <div class="wrap hero">
+      <span class="eyebrow">企業生成式 AI 的資安入口</span>
+      <h1>看見每一段送往 AI 的內容，<br>再決定該不該放行。</h1>
+      <p class="lead">Prompt Filter 以瀏覽器擴充功能記錄員工在 ChatGPT、Claude、Gemini 等生成式 AI 服務中輸入的提示詞與上傳的檔案，集中保存於企業自有的雲端，協助資安與法遵團隊掌握 AI 使用狀況，並逐步走向以 AI 政策即時把關。</p>
     </div>
+
+    <section class="wrap">
+      <h2>目前功能</h2>
+      <p class="sub">已可部署使用的能力。</p>
+      <div class="grid">
+        <div class="card"><span class="tag now">已提供</span><h3>多平台提示詞擷取</h3><p>支援 ChatGPT、Claude、Gemini，NotebookLM 為實驗性支援。在瀏覽器端攔截送出的請求，不需修改 AI 服務。</p></div>
+        <div class="card"><span class="tag now">已提供</span><h3>檔案上傳紀錄</h3><p>記錄上傳檔案的名稱、類型、大小與 SHA-256 雜湊；大型檔案僅保留中繼資料。</p></div>
+        <div class="card"><span class="tag now">已提供</span><h3>本機優先</h3><p>紀錄先存於使用者瀏覽器的 IndexedDB，可自行搜尋、篩選與匯出。</p></div>
+        <div class="card"><span class="tag now">已提供</span><h3>集中同步</h3><p>以帳號登入取得短效 token，將紀錄同步到 Cloudflare D1；變更密碼或停用帳號後舊 token 立即失效。</p></div>
+        <div class="card"><span class="tag now">已提供</span><h3>明確同意</h3><p>首次使用必須閱讀並同意記錄範圍，未同意前不會擷取任何內容。</p></div>
+        <div class="card"><span class="tag now">已提供</span><h3>管理後台</h3><p>限定授權的 Google 帳號登入，可集中檢視、搜尋、匯出紀錄並管理使用者帳號。</p></div>
+      </div>
+    </section>
+
+    <section class="wrap">
+      <h2>運作方式</h2>
+      <p class="sub">三個步驟，不改變員工原本使用 AI 的習慣。</p>
+      <div class="steps">
+        <div class="card"><h3>安裝擴充功能</h3><p>在員工的 Chrome 安裝 Prompt Filter，首次啟用時完成同意與帳號登入。</p></div>
+        <div class="card"><h3>自動擷取</h3><p>使用 AI 服務時，送出的提示詞與檔案資訊會即時記錄於本機。</p></div>
+        <div class="card"><h3>集中治理</h3><p>紀錄同步至企業的雲端，由管理者統一稽核與分析。</p></div>
+      </div>
+    </section>
+
+    <section class="wrap">
+      <div class="vision">
+        <span class="tag next">發展藍圖</span>
+        <h2>以 AI 設定攔截政策</h2>
+        <p class="sub" style="margin:0">從「記錄」走向「把關」：管理者只要用自然語言描述規則，由 AI 判斷內容是否可以送出。</p>
+        <ul>
+          <li><strong>AI 政策設定</strong>：例如 <code>禁止上傳客戶個資與身分證字號</code>、<code>原始碼與 API 金鑰不得送出</code>、<code>未公開財報需經主管核准</code>。</li>
+          <li><strong>即時攔截、遮罩或警示</strong>：在提示詞送出前檢查，依政策阻擋、自動遮蔽敏感片段或提醒使用者。</li>
+          <li><strong>敏感資料偵測</strong>：個資、帳密與金鑰、機密標記文件、內部專案代號等。</li>
+          <li><strong>部門與群組政策</strong>：不同單位套用不同規則與可用的 AI 服務。</li>
+          <li><strong>稽核報表與告警</strong>：違規趨勢統計、即時通知資安人員。</li>
+          <li><strong>擴充支援</strong>：更多生成式 AI 服務與企業內部 AI 平台。</li>
+        </ul>
+      </div>
+    </section>
   </main>
+
+  <footer>
+    <div class="wrap">© Prompt Filter・企業生成式 AI 的資安入口</div>
+  </footer>
 </body>
 </html>
