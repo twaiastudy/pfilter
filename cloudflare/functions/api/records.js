@@ -22,7 +22,9 @@ export async function onRequestGet({ request, env }) {
     where.push('site = ?');
     binds.push(site);
   }
-  if (kind) {
+  if (kind === 'pii') {
+    where.push("COALESCE(sensitive_json, '') <> ''");
+  } else if (kind) {
     where.push('kind = ?');
     binds.push(kind);
   }

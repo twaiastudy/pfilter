@@ -55,6 +55,7 @@ function render() {
     head.className = 'card-head';
     head.append(span(siteLabel(item.site), `badge ${item.site}`));
     if (item.kind === 'file') head.append(span('檔案', 'badge file'));
+    if (item.sensitive && item.sensitive.twId) head.append(span(`身分證 ×${item.sensitive.twId}`, 'badge pii'));
     head.append(span(fmtTime(item.ts)), span(item.displayName || '(未命名)'));
     if (item.model) head.append(span(item.model));
     head.append(span('', 'spacer'), span(item.id));

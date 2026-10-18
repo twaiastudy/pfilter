@@ -28,8 +28,8 @@ export async function onRequestPost({ request, env }) {
   const rec = normalizeRecord(payload);
   await env.DB.prepare(
     `INSERT OR IGNORE INTO records
-     (id, ts, kind, site, display_name, page_url, endpoint, model, text, attachments_json, raw, name, mime_type, size, hash, skipped)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+     (id, ts, kind, site, display_name, page_url, endpoint, model, text, attachments_json, raw, name, mime_type, size, hash, skipped, sensitive_json)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
   ).bind(
     rec.id,
     rec.ts,
@@ -46,7 +46,8 @@ export async function onRequestPost({ request, env }) {
     rec.mimeType,
     rec.size,
     rec.hash,
-    rec.skipped
+    rec.skipped,
+    rec.sensitiveJson
   ).run();
 
   return json({ ok: true, id: rec.id });

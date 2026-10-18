@@ -1,4 +1,4 @@
-importScripts('db.js');
+importScripts('db.js', 'pii.js');
 
 const hex = (buf) => [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, '0')).join('');
 const str = (v, max = 5000000) => (typeof v === 'string' ? v.slice(0, max) : '');
@@ -48,13 +48,24 @@ async function syncRecordToCloudflare(rec) {
     return;
   }
 
+  // 含個資的紀錄:上傳遮蔽版本,並丟棄可能含編碼原文的 raw
+  const payload = rec.sensitive
+    ? {
+        ...rec,
+        text: PVPII.maskTwIds(rec.text || ''),
+        name: PVPII.maskTwIds(rec.name || ''),
+        attachments: JSON.parse(PVPII.maskTwIds(JSON.stringify(rec.attachments || []))),
+        raw: ''
+      }
+    : rec;
+
   await fetch(endpoint, {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
       authorization: `Bearer ${cloudSyncToken}`
     },
-    body: JSON.stringify(rec)
+    body: JSON.stringify(payload)
   }).then((res) => {
     log('sync response', { ok: res.ok, status: res.status, site: rec.site, kind: rec.kind, endpoint: rec.endpoint });
   }).catch((e) => {
@@ -70,7 +81,18 @@ async function hasConsent() {
   return false;
 }
 
-async function handleRecord(raw) {
+function detectSensitive(rec) {
+  const twId = PVPII.findTwIds(rec.text || '').length
+    + PVPII.findTwIds(rec.name || '').length
+    + PVPII.findTwIds(JSON.stringify(rec.attachments || [])).length;
+  return twId ? { twId } : null;
+}
+
+function alertTab(tabId, sensitive) {
+  chrome.tabs.sendMessage(tabId, { type: 'pv-alert', sensitive }, { frameId: 0 }).catch(() => {});
+}
+
+async function handleRecord(raw, tabId) {
   const { enabled = false, consentAccepted = false, displayName = '', cloudSyncUserId = '' } = await chrome.storage.local.get(['enabled', 'consentAccepted', 'displayName', 'cloudSyncUserId']);
   if (!enabled || !consentAccepted || !raw) {
     log('drop record', { enabled, consentAccepted, hasRaw: Boolean(raw), site: raw && raw.site, kind: raw && raw.kind });
@@ -107,6 +129,12 @@ async function handleRecord(raw) {
     }
   } else return;
 
+  const sensitive = detectSensitive(rec);
+  if (sensitive) {
+    rec.sensitive = sensitive;
+    if (typeof tabId === 'number') alertTab(tabId, sensitive);
+  }
+
   log('record received', {
     site: rec.site,
     kind: rec.kind,
@@ -129,7 +157,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   }
   if (msg && msg.type === 'pv-record' && sender.tab) {
     log('pv-record message', { tabId: sender.tab.id, frameId: sender.frameId, url: sender.url, site: msg.record && msg.record.site, kind: msg.record && msg.record.kind });
-    handleRecord(msg.record)
+    handleRecord(msg.record, sender.tab.id)
       .then(() => sendResponse({ ok: true }))
       .catch((e) => sendResponse({ ok: false, error: String(e) }));
     return true;

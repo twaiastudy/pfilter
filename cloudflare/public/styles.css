@@ -94,6 +94,7 @@ button.ghost { background: transparent; color: var(--fg); border: 1px solid var(
 .badge.chatgpt { background: #10a37f; }
 .badge.claude { background: #c96442; }
 .badge.file { background: #3b82f6; }
+.badge.pii { background: #dc2626; }
 .spacer { flex: 1; }
 .body { white-space: pre-wrap; word-break: break-word; max-height: 280px; overflow: auto; }
 .sub { color: var(--muted); font-size: 13px; margin-top: 8px; }

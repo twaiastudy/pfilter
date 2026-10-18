@@ -32,6 +32,7 @@
   .badge.gemini { background: #4285f4; }
   .badge.notebook { background: #7c3aed; }
   .badge.file { background: #3b82f6; }
+  .badge.pii { background: #dc2626; }
   .spacer { flex: 1; }
   .text { white-space: pre-wrap; word-break: break-word; max-height: 360px; overflow: auto; }
   .small { font-size: 12px; padding: 2px 8px; }
@@ -48,7 +49,7 @@
     <h1>Prompt Filter</h1>
     <input type="search" id="q" placeholder="搜尋內容、檔名…">
     <select id="site"><option value="">全部網站</option><option value="chatgpt">ChatGPT</option><option value="claude">Claude</option><option value="gemini">Gemini</option><option value="notebook">Notebook</option></select>
-    <select id="kind"><option value="">全部類型</option><option value="prompt">Prompt</option><option value="file">檔案</option></select>
+    <select id="kind"><option value="">全部類型</option><option value="prompt">Prompt</option><option value="file">檔案</option><option value="pii">含個資</option></select>
     <button id="exp1">匯出 JSON</button>
     <button id="exp2">匯出(含檔案)</button>
     <button id="clear" class="danger">清空</button>

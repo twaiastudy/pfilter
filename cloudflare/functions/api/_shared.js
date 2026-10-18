@@ -36,6 +36,7 @@ export function isIngest(request, env) {
 
 export function normalizeRecord(record) {
   const attachments = Array.isArray(record.attachments) ? record.attachments : [];
+  const twId = Math.max(0, Math.floor(Number(record.sensitive && record.sensitive.twId) || 0));
   return {
     id: String(record.id || crypto.randomUUID()),
     ts: Number(record.ts) || Date.now(),
@@ -52,7 +53,8 @@ export function normalizeRecord(record) {
     mimeType: String(record.type || record.mimeType || '').slice(0, 200),
     size: Number(record.size) || 0,
     hash: String(record.hash || '').slice(0, 200),
-    skipped: record.skipped ? 1 : 0
+    skipped: record.skipped ? 1 : 0,
+    sensitiveJson: twId ? JSON.stringify({ twId }) : ''
   };
 }
 
@@ -74,6 +76,7 @@ export function rowToRecord(row) {
     size: row.size || 0,
     hash: row.hash || '',
     skipped: Boolean(row.skipped),
+    sensitive: row.sensitive_json ? JSON.parse(row.sensitive_json) : null,
     createdAt: row.created_at || 0
   };
 }

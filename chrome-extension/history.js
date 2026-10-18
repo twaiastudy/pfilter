@@ -41,6 +41,7 @@ function header(r, extra) {
   return el('div', { class: 'meta' },
     el('span', { class: 'badge ' + r.site }, siteName(r.site)),
     r.kind === 'file' ? el('span', { class: 'badge file' }, '檔案') : null,
+    r.sensitive && r.sensitive.twId ? el('span', { class: 'badge pii' }, `身分證 ×${r.sensitive.twId}`) : null,
     el('span', {}, fmtTime(r.ts)),
     r.model ? el('span', {}, r.model) : null,
     el('span', { class: 'spacer' }),
@@ -82,7 +83,8 @@ function card(r) {
 function render() {
   const q = $('#q').value.trim().toLowerCase();
   const site = $('#site').value, kind = $('#kind').value;
-  const rows = all.filter((r) => (!site || r.site === site) && (!kind || r.kind === kind) && (!q || haystack(r).includes(q)));
+  const kindOk = (r) => !kind || (kind === 'pii' ? Boolean(r.sensitive) : r.kind === kind);
+  const rows = all.filter((r) => (!site || r.site === site) && kindOk(r) && (!q || haystack(r).includes(q)));
   $('#count').textContent = `${rows.length} / ${all.length} 筆`;
   const list = $('#list');
   list.replaceChildren();
