@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Prompt Filter：企業生成式 AI 的資安入口。記錄並治理員工送往 ChatGPT、Claude、Gemini 的提示詞與檔案。">
-<title>Prompt Filter｜企業生成式 AI 資安入口</title>
+<meta name="description" content="Prompt Filter：讓影子 AI 變透明。記錄並治理員工送往 ChatGPT、Claude、Gemini 的提示詞與檔案，個資外洩即時示警。">
+<title>Prompt Filter｜讓影子 AI 變透明的企業生成式 AI 資安入口</title>
 <style>
   :root { color-scheme: light dark; --bg: #f5f7fb; --card: #fff; --fg: #162033; --muted: #667085; --line: #d7deea; --accent: #4f46e5; --ok: #0f9d7a; --warn: #d97706; }
   @media (prefers-color-scheme: dark) { :root { --bg: #0f1420; --card: #18202d; --fg: #eef2ff; --muted: #a3afc2; --line: #273246; --accent: #8188ff; --ok: #34d399; --warn: #fbbf24; } }
@@ -35,6 +35,41 @@
   .vision li { margin: 6px 0; }
   .vision code { background: rgba(127,127,127,.15); padding: 1px 6px; border-radius: 6px; font-size: 14px; }
   footer { padding: 36px 0 48px; color: var(--muted); font-size: 14px; border-top: 1px solid var(--line); margin-top: 24px; }
+
+  /* 影子 AI：導入前後對比 */
+  .compare { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+  .compare .card ul { margin: 8px 0 0; padding-left: 20px; color: var(--muted); }
+  .compare .card li { margin: 4px 0; }
+  .compare .before { border-style: dashed; opacity: .9; }
+  .compare .after { border-color: var(--accent); box-shadow: 0 14px 40px rgba(79,70,229,.18); }
+  .eye { font-size: 28px; line-height: 1; margin-bottom: 8px; }
+
+  /* 執行畫面模擬 */
+  .demo { display: grid; gap: 22px; }
+  .demo-row { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 22px; align-items: center; }
+  @media (max-width: 820px) { .demo-row { grid-template-columns: 1fr; } }
+  .demo-text h3 { margin: 0 0 6px; font-size: 19px; }
+  .demo-text p { margin: 0; color: var(--muted); }
+  .step-no { display: inline-block; font-size: 12px; font-weight: 800; color: var(--accent); letter-spacing: .08em; margin-bottom: 6px; }
+  .win { background: var(--card); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; box-shadow: 0 18px 50px rgba(0,0,0,.12); font-size: 14px; }
+  .win-bar { display: flex; align-items: center; gap: 6px; padding: 8px 12px; background: rgba(127,127,127,.10); border-bottom: 1px solid var(--line); }
+  .win-bar i { width: 10px; height: 10px; border-radius: 50%; background: #f87171; display: inline-block; }
+  .win-bar i:nth-child(2) { background: #fbbf24; } .win-bar i:nth-child(3) { background: #34d399; }
+  .win-bar span { margin-left: 10px; color: var(--muted); font-size: 12px; background: rgba(127,127,127,.12); padding: 2px 10px; border-radius: 999px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  .win-body { position: relative; padding: 18px; min-height: 210px; }
+  .bubble { max-width: 78%; padding: 9px 14px; border-radius: 16px; margin-bottom: 12px; }
+  .bubble.user { margin-left: auto; background: rgba(127,127,127,.14); }
+  .bubble.ai { color: var(--muted); }
+  .hl { background: rgba(220,38,38,.16); color: #dc2626; border-radius: 4px; padding: 0 3px; font-weight: 700; }
+  .toast { position: absolute; right: 14px; bottom: 14px; width: min(290px, calc(100% - 28px)); background: #fff7ed; color: #7c2d12; border: 1px solid #fb923c; border-radius: 12px; padding: 10px 12px; font-size: 13px; line-height: 1.5; box-shadow: 0 10px 30px rgba(0,0,0,.18); }
+  .toast strong { display: block; }
+  .rec { border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; margin-bottom: 10px; }
+  .rec-meta { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; color: var(--muted); font-size: 12px; margin-bottom: 4px; }
+  .b { color: #fff; border-radius: 999px; padding: 0 8px; font-size: 12px; font-weight: 700; }
+  .b.gpt { background: #10a37f; } .b.claude { background: #c96442; } .b.gemini { background: #4285f4; } .b.pii { background: #dc2626; }
+  .chip { display: inline-block; border: 1px solid var(--line); border-radius: 8px; padding: 2px 10px; font-size: 12px; margin: 0 6px 10px 0; color: var(--muted); }
+  .chip.on { border-color: #dc2626; color: #dc2626; font-weight: 700; }
+  .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
 </style>
 </head>
 <body>
@@ -43,15 +78,109 @@
   <main>
     <div class="wrap hero">
       <span class="eyebrow">企業生成式 AI 的資安入口</span>
-      <h1>看見每一段送往 AI 的內容，<br>再決定該不該放行。</h1>
-      <p class="lead">Prompt Filter 以瀏覽器擴充功能記錄員工在 ChatGPT、Claude、Gemini 等生成式 AI 服務中輸入的提示詞與上傳的檔案，集中保存於企業自有的雲端，協助資安與法遵團隊掌握 AI 使用狀況，並逐步走向以 AI 政策即時把關。</p>
+      <h1>讓影子 AI 變透明，<br>個資外洩即時示警。</h1>
+      <p class="lead">員工自行使用的 ChatGPT、Claude、Gemini —— 沒有經過 IT 審核、沒有任何紀錄的「影子 AI」，正是企業資料外洩的盲點。Prompt Filter 以瀏覽器擴充功能記錄每一段送往 AI 的提示詞與檔案，偵測到身分證字號等個資立即提醒，並集中保存於企業自有的雲端，讓資安與法遵團隊看得見、管得住。</p>
     </div>
+
+    <section class="wrap">
+      <h2>影子 AI，看得見才管得住</h2>
+      <p class="sub">禁用 AI 擋不住員工的使用需求；先讓使用狀況透明，再訂出合理的政策。</p>
+      <div class="compare">
+        <div class="card before">
+          <div class="eye">🙈</div>
+          <h3>導入前：黑箱</h3>
+          <ul>
+            <li>不知道誰在用、用哪一個 AI 服務</li>
+            <li>客戶個資、合約、原始碼被貼進對話框，沒人察覺</li>
+            <li>發生外洩事件時，無紀錄可查、無從舉證</li>
+          </ul>
+        </div>
+        <div class="card after">
+          <div class="eye">👁️</div>
+          <h3>導入後：透明</h3>
+          <ul>
+            <li><strong>誰</strong>在什麼時間、用了<strong>哪個 AI</strong>，一目了然</li>
+            <li><strong>送了什麼</strong>：提示詞全文、上傳檔案名稱與雜湊</li>
+            <li><strong>含不含個資</strong>：當下提醒員工，後台自動標記與篩選</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap">
+      <h2>實際執行畫面</h2>
+      <p class="sub">以下為系統實際運作的示意（範例使用公開的測試用字號 A123456789）。</p>
+      <div class="demo">
+
+        <div class="demo-row">
+          <div class="win" aria-label="ChatGPT 個資提醒示意">
+            <div class="win-bar"><i></i><i></i><i></i><span>chatgpt.com</span></div>
+            <div class="win-body" style="padding-bottom:96px">
+              <div class="bubble user">幫我填這份保險申請書，申請人王小明，身分證 <span class="hl">A123456789</span></div>
+              <div class="bubble ai">好的，以下是申請書的填寫建議…</div>
+              <div class="toast"><strong>Prompt Filter 個資提醒</strong>剛送出的內容含有 1 筆身分證字號。請避免將個人資料提供給 AI 服務。</div>
+            </div>
+          </div>
+          <div class="demo-text">
+            <span class="step-no">STEP 1　員工端</span>
+            <h3>送出的當下就收到提醒</h3>
+            <p>員工在 ChatGPT、Claude 或 Gemini 輸入身分證字號，頁面右下角立即跳出個資提醒。偵測會驗證檢查碼，也支援全形字、空白與連字號寫法，降低誤判與規避。</p>
+          </div>
+        </div>
+
+        <div class="demo-row">
+          <div class="win" aria-label="擴充功能歷史紀錄示意">
+            <div class="win-bar"><i></i><i></i><i></i><span>Prompt Filter · 歷史紀錄</span></div>
+            <div class="win-body">
+              <span class="chip">全部網站</span><span class="chip on">含個資</span>
+              <div class="rec">
+                <div class="rec-meta"><span class="b gpt">ChatGPT</span><span class="b pii">身分證 ×1</span><span>2026/10/18 09:41</span></div>
+                幫我填這份保險申請書，申請人王小明，身分證 A123456789
+              </div>
+              <div class="rec">
+                <div class="rec-meta"><span class="b claude">Claude</span><span class="b pii">身分證 ×2</span><span>2026/10/17 16:05</span></div>
+                整理這兩位客戶的資料表…
+              </div>
+            </div>
+          </div>
+          <div class="demo-text">
+            <span class="step-no">STEP 2　本機紀錄</span>
+            <h3>每一筆都有標記</h3>
+            <p>紀錄先存在員工自己的瀏覽器，含個資的紀錄自動加上紅色標籤，可一鍵篩選「含個資」，員工也能自我檢視。</p>
+          </div>
+        </div>
+
+        <div class="demo-row">
+          <div class="win" aria-label="管理後台示意">
+            <div class="win-bar"><i></i><i></i><i></i><span>管理後台（僅限授權管理者）</span></div>
+            <div class="win-body">
+              <span class="chip">全部網站</span><span class="chip on">含個資</span><span class="chip">共 3 筆</span>
+              <div class="rec">
+                <div class="rec-meta"><span class="b gpt">ChatGPT</span><span class="b pii">身分證 ×1</span><span>業務部 alice</span><span>09:41</span></div>
+                幫我填這份保險申請書，申請人王小明，身分證 <span class="mono">A********9</span>
+              </div>
+              <div class="rec">
+                <div class="rec-meta"><span class="b gemini">Gemini</span><span class="b pii">身分證 ×1</span><span>客服部 bob</span><span>昨天</span></div>
+                這位客戶 <span class="mono">F********2</span> 的退款該怎麼回覆…
+              </div>
+            </div>
+          </div>
+          <div class="demo-text">
+            <span class="step-no">STEP 3　管理者</span>
+            <h3>集中稽核，個資不落地</h3>
+            <p>紀錄同步到企業雲端時，身分證字號自動遮蔽為 <span class="mono">A********9</span>，原始請求不上傳。管理者看得到「誰、在哪個 AI、送了多少個資」，但後台本身不會變成另一個個資庫。</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
 
     <section class="wrap">
       <h2>目前功能</h2>
       <p class="sub">已可部署使用的能力。</p>
       <div class="grid">
         <div class="card"><span class="tag now">已提供</span><h3>多平台提示詞擷取</h3><p>支援 ChatGPT、Claude、Gemini，NotebookLM 為實驗性支援。在瀏覽器端攔截送出的請求，不需修改 AI 服務。</p></div>
+        <div class="card"><span class="tag now">已提供</span><h3>個資偵測與提醒</h3><p>偵測身分證與居留證字號（含檢查碼驗證），送出當下提醒員工；同步到雲端的內容自動遮蔽。</p></div>
         <div class="card"><span class="tag now">已提供</span><h3>檔案上傳紀錄</h3><p>記錄上傳檔案的名稱、類型、大小與 SHA-256 雜湊；大型檔案僅保留中繼資料。</p></div>
         <div class="card"><span class="tag now">已提供</span><h3>本機優先</h3><p>紀錄先存於使用者瀏覽器的 IndexedDB，可自行搜尋、篩選與匯出。</p></div>
         <div class="card"><span class="tag now">已提供</span><h3>集中同步</h3><p>以帳號登入取得短效 token，將紀錄同步到 Cloudflare D1；變更密碼或停用帳號後舊 token 立即失效。</p></div>
@@ -78,7 +207,8 @@
         <ul>
           <li><strong>AI 政策設定</strong>：例如 <code>禁止上傳客戶個資與身分證字號</code>、<code>原始碼與 API 金鑰不得送出</code>、<code>未公開財報需經主管核准</code>。</li>
           <li><strong>即時攔截、遮罩或警示</strong>：在提示詞送出前檢查，依政策阻擋、自動遮蔽敏感片段或提醒使用者。</li>
-          <li><strong>敏感資料偵測</strong>：個資、帳密與金鑰、機密標記文件、內部專案代號等。</li>
+          <li><strong>敏感資料偵測</strong>：身分證字號已上線，將擴充至手機、信用卡、帳密與金鑰、機密標記文件、內部專案代號等。</li>
+          <li><strong>送出前自動脫敏、回應後還原</strong>：個資以代號送給 AI，顯示回應時再還原為原文，對照表只存在本機。</li>
           <li><strong>部門與群組政策</strong>：不同單位套用不同規則與可用的 AI 服務。</li>
           <li><strong>稽核報表與告警</strong>：違規趨勢統計、即時通知資安人員。</li>
           <li><strong>擴充支援</strong>：更多生成式 AI 服務與企業內部 AI 平台。</li>
@@ -88,7 +218,7 @@
   </main>
 
   <footer>
-    <div class="wrap">© Prompt Filter・企業生成式 AI 的資安入口</div>
+    <div class="wrap">© Prompt Filter・讓影子 AI 變透明的企業生成式 AI 資安入口</div>
   </footer>
 </body>
 </html>
