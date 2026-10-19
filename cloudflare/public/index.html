@@ -109,14 +109,14 @@
 
     <section class="wrap">
       <h2>實際執行畫面</h2>
-      <p class="sub">以下為系統實際運作的示意（範例使用公開的測試用字號 A123456789）。</p>
+      <p class="sub">以下為系統實際運作的示意（範例中的身分證字號為示範用號碼，非真實資料）。</p>
       <div class="demo">
 
         <div class="demo-row">
           <div class="win" aria-label="ChatGPT 個資提醒示意">
             <div class="win-bar"><i></i><i></i><i></i><span>chatgpt.com</span></div>
             <div class="win-body" style="padding-bottom:96px">
-              <div class="bubble user">幫我填這份保險申請書，申請人王小明，身分證 <span class="hl">A123456789</span></div>
+              <div class="bubble user">幫我填這份保險申請書，申請人王小明，身分證 <span class="hl">A123456780</span></div>
               <div class="bubble ai">好的，以下是申請書的填寫建議…</div>
               <div class="toast"><strong>Prompt Filter 個資提醒</strong>剛送出的內容含有 1 筆身分證字號。請避免將個人資料提供給 AI 服務。</div>
             </div>
@@ -135,7 +135,7 @@
               <span class="chip">全部網站</span><span class="chip on">含個資</span>
               <div class="rec">
                 <div class="rec-meta"><span class="b gpt">ChatGPT</span><span class="b pii">身分證 ×1</span><span>2026/10/18 09:41</span></div>
-                幫我填這份保險申請書，申請人王小明，身分證 A123456789
+                幫我填這份保險申請書，申請人王小明，身分證 A123456780
               </div>
               <div class="rec">
                 <div class="rec-meta"><span class="b claude">Claude</span><span class="b pii">身分證 ×2</span><span>2026/10/17 16:05</span></div>
@@ -157,7 +157,7 @@
               <span class="chip">全部網站</span><span class="chip on">含個資</span><span class="chip">共 3 筆</span>
               <div class="rec">
                 <div class="rec-meta"><span class="b gpt">ChatGPT</span><span class="b pii">身分證 ×1</span><span>業務部 alice</span><span>09:41</span></div>
-                幫我填這份保險申請書，申請人王小明，身分證 <span class="mono">A********9</span>
+                幫我填這份保險申請書，申請人王小明，身分證 <span class="mono">A********0</span>
               </div>
               <div class="rec">
                 <div class="rec-meta"><span class="b gemini">Gemini</span><span class="b pii">身分證 ×1</span><span>客服部 bob</span><span>昨天</span></div>
@@ -168,7 +168,7 @@
           <div class="demo-text">
             <span class="step-no">STEP 3　管理者</span>
             <h3>集中稽核，個資不落地</h3>
-            <p>紀錄同步到企業雲端時，身分證字號自動遮蔽為 <span class="mono">A********9</span>，原始請求不上傳。管理者看得到「誰、在哪個 AI、送了多少個資」，但後台本身不會變成另一個個資庫。</p>
+            <p>紀錄同步到企業雲端時，身分證字號自動遮蔽為 <span class="mono">A********0</span>，原始請求不上傳。管理者看得到「誰、在哪個 AI、送了多少個資」，但後台本身不會變成另一個個資庫。</p>
           </div>
         </div>
 
